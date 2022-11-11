@@ -42,7 +42,7 @@ export default function Layout({ children }) {
    
 
     useEffect(() => {
-        refreshAuthToken()
+       
         listenForRouteChangeEvents()
     }, [])
     
@@ -59,7 +59,7 @@ export default function Layout({ children }) {
 
     async function listenForRouteChangeEvents() {
         router.events.on('routeChangeStart', () => {
-            refreshAuthToken()
+            //refreshAuthToken()
         })
     }
 

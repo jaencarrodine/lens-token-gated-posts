@@ -8,5 +8,5 @@ mutation Refresh(
     accessToken
     refreshToken
   }
-}s
+}
 `

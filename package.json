@@ -9,16 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lit-protocol/sdk-browser": "^1.1.234",
     "@rainbow-me/rainbowkit": "^0.7.4",
     "@uiw/react-md-editor": "^3.6.0",
     "daisyui": "^2.39.0",
     "ethers": "^5.0.0",
+    "ipfs-http-client": "^59.0.0",
     "next": "^12.1.6",
     "next-remove-imports": "^1.0.8",
     "omit-deep": "^0.3.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-markdown": "^8.0.3",
     "urql": "^3.0.3",
+    "uuid": "^9.0.0",
     "wagmi": "^0.7.5",
     "zustand": "^4.1.4"
   },

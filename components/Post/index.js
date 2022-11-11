@@ -3,6 +3,7 @@ import EditPost from './EditPost';
 import GatePost from './GatePost';
 import SendPost from './SendPost';
 
+
 export default function Post(){
 
     return(

@@ -56,6 +56,7 @@ export async function urqlQuery(query, variables) {
 }
 
 export async function urqlMutation(mutation, variables) {
+  console.log('mutation: ', mutation)
   const urqlClient = await createClient()
   const response = await urqlClient.mutation(mutation, variables).toPromise()
   return response
