@@ -4,12 +4,18 @@ import styles from '../../styles/Layout.module.css';
 import Head from 'next/head';
 import { useAccount } from 'wagmi'
 import { useUserInfo } from '../../store/useUserInfo'
-import { createClient, STORAGE_KEY, authenticate as authenticateMutation, getChallenge, getDefaultProfile, getProfile } from '../../api'
+import { createClient, STORAGE_KEY, urqlQuery, urqlMutation} from '../../api'
+import {authenticate} from '../../api/mutations/authenticate'
+import { getDefaultProfile} from '../../api/queries/getDefaultProfile';
+import { getChallenge } from '../../api/queries/getChallenge';
 import { useSignMessage } from 'wagmi'
 import { useEffect } from 'react';
-import { parseJwt, refreshAuthToken } from '../../utils/utils'
+import {parseJwt} from '../../utils/parseJwt'
+import {refreshAuthToken } from '../../utils/refreshAuthToken';
+
 import { useRouter } from 'next/router'
-//TODO sign out on wallet disconnect
+
+//TODO add error handling for get profile and get challenge
 export default function Layout({ children }) {
     const profile = useUserInfo(state => state.profile)
     const userAddress = useUserInfo(state => state.userAddress)
@@ -20,11 +26,17 @@ export default function Layout({ children }) {
     const account = useAccount({
         onConnect({ address }) {
             setUserAddress(address)
-            if(userAddress !== address) {
+            if(userAddress !== address || profile === null) {
                 signIn(address)
             }
         },
+        onDisconnect(){
+            setUserAddress(null)
+            setProfile(null)
+        }
     })
+
+    
 
     const router = useRouter()
    
@@ -36,10 +48,9 @@ export default function Layout({ children }) {
     
     async function getUserProfile(address) {
         try {
-            const urqlClient = await createClient()
-            const response = await urqlClient.query(getDefaultProfile, {
-            address
-            }).toPromise()
+
+            const response = await urqlQuery(getDefaultProfile, {address})
+
             setProfile(response.data.defaultProfile)
         } catch (err) {
             console.log('error fetching user profile...: ', err)
@@ -54,14 +65,11 @@ export default function Layout({ children }) {
 
     async function signIn(account) {
         try {
-            const urqlClient = await createClient()
-            const response = await urqlClient.query(getChallenge, {
-            address: account
-            }).toPromise()
+            const response = await urqlQuery(getChallenge, { address: account })
             const signature = await signMessageAsync({message:response.data.challenge.text})
-            const authData = await urqlClient.mutation(authenticateMutation, {
+            const authData = await urqlMutation(authenticate, {
             address: account, signature
-            }).toPromise()
+            })
             const { accessToken, refreshToken } = authData.data.authenticate
             const accessTokenData = parseJwt(accessToken)
             getUserProfile(account)

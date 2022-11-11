@@ -1,7 +1,7 @@
 import { createClient as createUrqlClient } from 'urql'
-import { getProfiles, getPublications } from './queries'
-import { refreshAuthToken, generateRandomColor } from '../utils/utils'
-
+import getProfiles from './queries/getProfiles'
+import getPublications from './queries/getPublications'
+import { refreshAuthToken } from '../utils/refreshAuthToken'
 export const APIURL = 'https://api-mumbai.lens.dev' //"https://api.lens.dev"
 export const STORAGE_KEY = "LH_STORAGE_KEY"
 export const LENS_HUB_CONTRACT_ADDRESS = "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82" //"0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"
@@ -16,7 +16,7 @@ export async function fetchProfile(id) {
     const urqlClient = await createClient()
     const returnedProfile = await urqlClient.query(getProfiles, { id }).toPromise();
     const profileData = returnedProfile.data.profiles.items[0]
-    profileData.color = generateRandomColor()
+    //profileData.color = generateRandomColor()
     const pubs = await urqlClient.query(getPublications, { id, limit: 50 }).toPromise()
     return {
       profile: profileData,
@@ -49,27 +49,15 @@ export async function createClient() {
   }
 }
 
-export {
-  recommendProfiles,
-  getProfiles,
-  getProfile,
-  getDefaultProfile,
-  getPublications,
-  searchProfiles,
-  searchPublications,
-  explorePublications,
-  doesFollow,
-  getChallenge,
-  timeline,
-} from './queries'
+export async function urqlQuery(query, variables) {
+  const urqlClient = await createClient()
+  const response = await urqlClient.query(query, variables).toPromise()
+  return response
+}
 
-export {
-  followUser,
-  authenticate,
-  refresh,
-  createUnfollowTypedData,
-  broadcast,
-  createProfileMetadataTypedData,
-  setDefaultProfile,
-  createPostTypedData,
-} from './mutations'
+export async function urqlMutation(mutation, variables) {
+  const urqlClient = await createClient()
+  const response = await urqlClient.mutation(mutation, variables).toPromise()
+  return response
+}
+
