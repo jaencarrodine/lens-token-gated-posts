@@ -40,9 +40,6 @@ export default function Layout({ children }) {
             const response = await urqlClient.query(getDefaultProfile, {
             address
             }).toPromise()
-            console.log('response', response.data)
-            // const response = await urqlClient.query(getProfile).toPromise()
-            // console.log('response: ', response)
             setProfile(response.data.defaultProfile)
         } catch (err) {
             console.log('error fetching user profile...: ', err)
@@ -61,8 +58,6 @@ export default function Layout({ children }) {
             const response = await urqlClient.query(getChallenge, {
             address: account
             }).toPromise()
-            
-           console.log('message', response.data.challenge.text)
             const signature = await signMessageAsync({message:response.data.challenge.text})
             const authData = await urqlClient.mutation(authenticateMutation, {
             address: account, signature

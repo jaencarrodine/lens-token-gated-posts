@@ -1,0 +1,2 @@
+//TODO: create queries and mutations folder
+//TODO: create an individual file for each util
