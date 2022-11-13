@@ -18,10 +18,10 @@ const client = create({
     },
 });
 
-export async function uploadPostToIPFS(postInfo,profile) {
+export async function uploadPostToIPFS(postInfo,profile, signData) {
   console.log('profile: ', profile)
     let stringToEncrypt = postInfo.stringToEncrypt
-    const { encryptedString, encryptedSymmetricKey } = await lit.encryptText(stringToEncrypt)
+    const { encryptedString, encryptedSymmetricKey } = await lit.encryptText(stringToEncrypt, signData)
     const blobToBase64 = blob => {
         const reader = new FileReader();
         reader.readAsDataURL(blob);

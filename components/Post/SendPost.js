@@ -6,7 +6,7 @@ import { urqlMutation } from '../../api';
 import {createPostTypedData} from '../../api/mutations/createPostTypedData';
 import {signedTypeData} from '../../utils/signedTypeData'
 import { splitSignature } from '../../utils/splitSignature';
-import {useContractWrite, useSigner} from 'wagmi'
+import {useContractWrite, useSigner, useSignMessage} from 'wagmi'
 import {LENS_HUB_CONTRACT_ADDRESS}from '../../constants';
 import LENSHUB_ABI from '../../abi/lenshub.json'
 
@@ -15,7 +15,8 @@ export default function SendPost(){
     
     const postContent = usePost(state => state.postContent)
     const profile = useUserInfo(state => state.profile)
-   
+    const userAddress = useUserInfo(state => state.userAddress)
+    const encryptSignatureMessage = 'Sign this message to encrypt the post'
     const {
         error,
         isLoading: writeLoading,
@@ -26,6 +27,9 @@ export default function SendPost(){
         functionName: 'postWithSig',
         mode: 'recklesslyUnprepared',
     });
+    const {signMessageAsync} = useSignMessage({
+        message:encryptSignatureMessage
+    })
 
     const { data: signer, isError, isLoading } = useSigner()
 
@@ -35,12 +39,20 @@ export default function SendPost(){
     }
 
     async function savePost() {
+        //add check to make sure user is signed in
         console.log('saving post...')
-        const ipfsResult= await uploadPostToIPFS({stringToEncrypt:postContent}, profile)
+        const signData = {
+            userAddress: userAddress,
+            message: encryptSignatureMessage,
+            signMessageAsync: signMessageAsync
+        }
+        const ipfsResult= await uploadPostToIPFS({stringToEncrypt:postContent}, profile, signData)
+        console.log('ipfsResult: ', ipfsResult)
         const signedResult = await urqlMutation(createPostTypedData, {
             profileId: profile.id,
             contentURI: 'ipfs://' + ipfsResult.path,
         })
+        console.log('signedResult: ', signedResult)
 
         const typedData = signedResult.data.createPostTypedData.typedData;
 
