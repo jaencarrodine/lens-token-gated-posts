@@ -21,7 +21,8 @@ const client = create({
 export async function uploadPostToIPFS(postInfo,profile, signData) {
   console.log('profile: ', profile)
     let stringToEncrypt = postInfo.stringToEncrypt
-    const { encryptedString, encryptedSymmetricKey } = await lit.encryptText(stringToEncrypt, signData)
+    let accessControlConditions = postInfo.accessControlConditions
+    const { encryptedString, encryptedSymmetricKey } = await lit.encryptText(stringToEncrypt, accessControlConditions, signData)
     const blobToBase64 = blob => {
         const reader = new FileReader();
         reader.readAsDataURL(blob);
@@ -53,6 +54,10 @@ export async function uploadPostToIPFS(postInfo,profile, signData) {
             {
                 traitType: "encryptedSymmetricKey",
                 value: encryptedSymmetricKey,
+            },
+            {
+                traitType: "accessControlConditions",
+                value: JSON.stringify(accessControlConditions),
             }
         ],
         tags: ['using_api_examples'],

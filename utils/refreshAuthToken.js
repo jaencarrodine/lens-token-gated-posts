@@ -1,17 +1,20 @@
 import { basicClient, STORAGE_KEY, urqlMutation } from '../api'
 import {refreshAPIToken} from '../api/mutations/refreshAPIToken'
 import { parseJwt } from './parseJwt'
-import { createClient } from '../api'
+import { urqlUnauthenticatedMutation } from '../api'
 export async function refreshAuthToken() {
-  const token = JSON.parse(localStorage.getItem(STORAGE_KEY))
+  console.log('refreshing auth token...')
+  const token = await JSON.parse(localStorage.getItem(STORAGE_KEY))
   console.log('token: ', token)
-  if (token.accessToken === undefined){
-    
-    
+  console.log('token.accessToken: ', token.accessToken)
+  //if the access token is undefined or expired, refresh it
+  const currentTime = new Date().getTime() / 1000
+  console.log(token.exp) 
+  console.log(token.exp < currentTime)
   
-    try {
-      const client = await createClient()
-      const authData = await client.mutation(refreshAPIToken, { refreshToken: token.refreshToken }).toPromise()
+      
+    try{
+      const authData = await urqlUnauthenticatedMutation(refreshAPIToken, { refreshToken: token.refreshToken })
       // const authData = await (refreshAPIToken, {
       //   refreshToken: token.refreshToken
       // })
@@ -32,9 +35,5 @@ export async function refreshAuthToken() {
     } catch (err) {
       console.log('error:', err)
     }
-  } else {
-    return {
-      accessToken: token.accessToken
-    }
-  }
+  
 }

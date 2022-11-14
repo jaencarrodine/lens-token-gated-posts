@@ -29,6 +29,7 @@ export async function fetchProfile(id) {
 
 export async function createClient() {
   const storageData = JSON.parse(localStorage.getItem(STORAGE_KEY))
+  console.log('storageData: ', storageData)
   if (storageData) {
     try {
       const { accessToken } = await refreshAuthToken()
@@ -62,3 +63,10 @@ export async function urqlMutation(mutation, variables) {
   return response
 }
 
+export async function urqlUnauthenticatedMutation(mutation, variables) {
+  const urqlClient = new createUrqlClient({
+    url: APIURL
+  })
+  const response = await urqlClient.mutation(mutation, variables).toPromise()
+  return response
+}

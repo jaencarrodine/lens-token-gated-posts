@@ -1,7 +1,7 @@
 import create from 'zustand'
+import { devtools } from 'zustand/middleware'
 
-
-export const useAccessControlData = create((set) => ({
+const store = (set) => ({
     accessControlConditions:[],
     addAccessControlCondition: (condition) => set(state => ({ accessControlConditions: [...state.accessControlConditions, condition] })),
     removeAccessControlConditionByIndex: (index) => set(state => {
@@ -12,5 +12,7 @@ export const useAccessControlData = create((set) => ({
     setAccessControlConditions: (conditions) => set({ accessControlConditions: conditions }),
 
     
-}))
+})
 
+
+export const useAccessControlData = create(devtools(store))
