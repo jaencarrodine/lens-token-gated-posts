@@ -13,7 +13,7 @@ export default function EditPost() {
   const postContent = usePost(state => state.postContent)
   const setPostContent = usePost(state => state.setPostContent)
   return (
-    <div className='h-full  pt-32'>
+    <div className='h-full  pt-4'>
       <MDEditor value={postContent} height ={400} onChange={setPostContent} />
     </div>
   );

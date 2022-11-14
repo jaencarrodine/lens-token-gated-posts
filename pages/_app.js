@@ -1,17 +1,19 @@
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import '../styles/globals.css'
-import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, getDefaultWallets, darkTheme, lightTheme } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Layout from '../components/Layout/Layout';
+import { ThemeProvider } from 'next-themes'
+import {useTheme} from 'next-themes'
 const { chains, provider, webSocketProvider } = configureChains(
   [
-    chain.mainnet,
-    chain.polygon,
-    chain.optimism,
-    chain.arbitrum,
+    // chain.mainnet,
+    // chain.polygon,
+    // chain.optimism,
+    // chain.arbitrum,
     chain.polygonMumbai,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
       ? [chain.goerli, chain.kovan, chain.rinkeby, chain.ropsten]
@@ -38,15 +40,26 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }) {
+  
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
+    <ThemeProvider  enableSystem={true} attribute="class">
+      <Wrappers>
+        <Component {...pageProps} />
+      </Wrappers>
+    </ThemeProvider>
+  );
+}
+function Wrappers({children}) {
+  const {systemTheme} = useTheme()
+  console.log('theme: ', systemTheme)
+  return (
+    <WagmiConfig client={wagmiClient}  >
+      <RainbowKitProvider chains={chains} theme = {systemTheme === 'dark'? darkTheme() :lightTheme()} >
         <Layout>
-          <Component {...pageProps} />
+          {children}
         </Layout>
       </RainbowKitProvider>
     </WagmiConfig>
-  );
+  )
 }
-
 export default MyApp;

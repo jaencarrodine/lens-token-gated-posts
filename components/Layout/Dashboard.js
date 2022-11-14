@@ -15,6 +15,9 @@ import {
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import {useTheme} from 'next-themes'
+import { useUserInfo } from '../../store/useUserInfo'
 
 const navigation = [
   { name: 'Home', href: '/', icon: HomeIcon, current: true },
@@ -36,12 +39,14 @@ function classNames(...classes) {
 export default function Dashboard({children}) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const router = useRouter()
-
+    const profile = useUserInfo(state => state.profile)
+    console.log('profile: ', profile)
     function isCurrentPath(item) {
         return router.pathname === item.href
     }
         
-    
+    const {systemTheme} = useTheme()
+
     return (
         <>
         {/*
@@ -101,7 +106,7 @@ export default function Dashboard({children}) {
                     <div className="flex flex-shrink-0 items-center px-4">
                         <img
                         className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                        src={profile?.picture?.original?.url}
                         alt="Your Company"
                         />
                     </div>
@@ -211,13 +216,8 @@ export default function Dashboard({children}) {
                     </form> */}
                 </div>
                 <div className="ml-4 flex items-center md:ml-6">
-                    <button
-                    type="button"
-                    className="rounded-full bg-base-100 p-1 text-auto hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
+                    <ConnectButton label = "Sign In" accountStatus="address" showBalance={false}/>
+                    
 
                     {/* Profile dropdown */}
                     <Menu as="div" className="relative ml-3">
@@ -226,7 +226,7 @@ export default function Dashboard({children}) {
                         <span className="sr-only">Open user menu</span>
                         <img
                             className="h-8 w-8 rounded-full"
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            src={profile?.picture?.original?.url}
                             alt=""
                         />
                         </Menu.Button>

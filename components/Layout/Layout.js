@@ -12,7 +12,6 @@ import { useSignMessage } from 'wagmi'
 import { useEffect } from 'react';
 import {parseJwt} from '../../utils/parseJwt'
 import {refreshAuthToken } from '../../utils/refreshAuthToken';
-
 import { useRouter } from 'next/router'
 import Dashboard from './Dashboard';
 
@@ -22,7 +21,6 @@ export default function Layout({ children }) {
     const userAddress = useUserInfo(state => state.userAddress)
     const setProfile = useUserInfo(state => state.setProfile)
     const setUserAddress = useUserInfo(state => state.setUserAddress)
-
     const {signMessageAsync} = useSignMessage()
     const account = useAccount({
         onConnect({ address }) {

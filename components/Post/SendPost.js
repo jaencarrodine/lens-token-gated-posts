@@ -41,6 +41,13 @@ export default function SendPost(){
         
     }
 
+    function accessControlsSet(){
+        if(accessControlConditions.length > 0){
+            return true
+        }
+        return false
+    }
+
     async function savePost() {
         //add check to make sure user is signed in
         //add check to make sure access controls exist
@@ -87,7 +94,7 @@ export default function SendPost(){
     }
 
     return(
-        <button class="btn btn-outline btn-primary" onClick = {handleClick}>Post</button>
+        <button class={`btn btn-primary ${accessControlsSet()?'':'btn-disabled btn-outline '}`} onClick = {handleClick}>Post</button>
     )
 
 }
