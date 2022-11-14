@@ -14,6 +14,7 @@ import {parseJwt} from '../../utils/parseJwt'
 import {refreshAuthToken } from '../../utils/refreshAuthToken';
 
 import { useRouter } from 'next/router'
+import Dashboard from './Dashboard';
 
 //TODO add error handling for get profile and get challenge
 export default function Layout({ children }) {
@@ -80,7 +81,8 @@ export default function Layout({ children }) {
             console.log('error: ', err)
         }
     }
-
+    const nonDashPages = ['/publication']
+    const isDashboard = !nonDashPages.includes(router.pathname)
 
     
 
@@ -97,20 +99,19 @@ export default function Layout({ children }) {
         </Head>
         
        
-        <main className='min-h-screen h-full w-full flex flex-col relative'>
-            <div className='w-full p-3'>
+        <main className='min-h-screen h-full w-full flex flex-col relative bg-base-200'>
+            {/* <div className='w-full p-3'>
                 <ConnectButton />
                 
-            </div>
-
-            {children}
+            </div> */}
+           {isDashboard &&
+                <Dashboard >
+                    {children}
+                </Dashboard>
+            }
         </main>
 
-        <footer className={styles.footer}>
-            <a href="https://www.open.jaen.app" target="_blank" rel="noopener noreferrer">
-                app by Jaen
-            </a>
-        </footer>
+       
         </div>
 
     )
