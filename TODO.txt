@@ -1,3 +1,4 @@
 //TODO: for now write a check that before every call to api we ensure that user is signed in if not the prompt them to sign back in
 //TODO: make a cleanish ui
 //TODO: implement some basic error handling
+//TODO: persist the new post info 

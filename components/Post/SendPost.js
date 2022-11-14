@@ -15,6 +15,8 @@ import { useAccessControlData } from '../../store/useAccessControlData';
 export default function SendPost(){
     
     const postContent = usePost(state => state.postContent)
+    const postTitle = usePost(state => state.postTitle)
+    const postDescription = usePost(state => state.postDescription)
     const profile = useUserInfo(state => state.profile)
     const userAddress = useUserInfo(state => state.userAddress)
     const accessControlConditions = useAccessControlData(state => state.accessControlConditions)
@@ -57,11 +59,13 @@ export default function SendPost(){
             message: encryptSignatureMessage,
             signMessageAsync: signMessageAsync
         }
-        const encryptionData = {
+        const postInfo= {
             stringToEncrypt: postContent,
             accessControlConditions: accessControlConditions,
+            name: postTitle,
+            description: postDescription
         }
-        const ipfsResult= await uploadPostToIPFS(encryptionData, profile, signData)
+        const ipfsResult= await uploadPostToIPFS(postInfo, profile, signData)
         console.log('ipfsResult: ', ipfsResult)
         const signedResult = await urqlMutation(createPostTypedData, {
             profileId: profile.id,

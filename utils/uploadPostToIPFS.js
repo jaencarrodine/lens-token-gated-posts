@@ -38,13 +38,13 @@ export async function uploadPostToIPFS(postInfo,profile, signData) {
         version: '2.0.0',
         mainContentFocus: 'TEXT_ONLY',
         metadata_id: uuid(),
-        description: 'Encrypted Lens post',
+        description: postInfo.description,
         locale: 'en-US',
         content: encryptedContentString,
         external_url: `https://lenster.xyz/u/${profile.handle}`,
         image: null,
         imageMimeType: null,
-        name: 'Name',
+        name: postInfo.name,
         attributes: [
             {
             traitType: "string",
