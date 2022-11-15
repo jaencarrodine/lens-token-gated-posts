@@ -40,7 +40,7 @@ const wagmiClient = createClient({
 });
 
 function MyApp({ Component, pageProps }) {
-  
+
   return (
     <ThemeProvider  enableSystem={true} attribute="class">
       <Wrappers>

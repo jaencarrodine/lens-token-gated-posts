@@ -14,6 +14,7 @@
     "@lit-protocol/sdk-browser": "^1.1.234",
     "@rainbow-me/rainbowkit": "^0.7.4",
     "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "github:tailwindcss/typography",
     "@uiw/react-md-editor": "^3.6.0",
     "alchemy-sdk": "^2.2.1",
     "daisyui": "^2.39.0",

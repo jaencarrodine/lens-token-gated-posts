@@ -79,10 +79,10 @@ export default function Layout({ children }) {
             console.log('error: ', err)
         }
     }
-    const nonDashPages = ['/publication']
+    const nonDashPages = ['/publication/[id]']
     const isDashboard = !nonDashPages.includes(router.pathname)
 
-    
+    console.log('pathname: ', router.pathname)
 
     return(
 
@@ -102,10 +102,12 @@ export default function Layout({ children }) {
                 <ConnectButton />
                 
             </div> */}
-           {isDashboard &&
+           {isDashboard ?
                 <Dashboard >
                     {children}
                 </Dashboard>
+                :
+                children
             }
         </main>
 
