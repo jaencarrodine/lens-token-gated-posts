@@ -11,6 +11,7 @@ const Home = () => {
   const profile = useUserInfo(state => state.profile)
   useEffect(() => {
     getUserPublications()
+
   }, [profile])
 
   async function getUserPublications(){
@@ -18,6 +19,7 @@ const Home = () => {
       console.log('profile: ', profile)
       let publications = await urqlQuery(getPublications, { id: profile.id, limit: 5 })
       setPublications(publications.data.publications.items)
+      console.log(publications.data.publications.items[0])
     }
     
   }

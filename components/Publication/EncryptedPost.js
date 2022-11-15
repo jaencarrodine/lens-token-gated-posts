@@ -32,18 +32,23 @@ export default function EncryptedPost({publication, encryptedSymmetricKey, acces
         signMessageAsync: signMessageAsync
     }
     async function decryptContent(){
-        setDecrypting(true)
-        console.log('decrypting content...')
-        console.log(publication)
-        console.log('accessControlConditions: ', accessControlConditions)
-        let encryptedString = publication.metadata.content
-        const encryptedBlob = await (await fetch(encryptedString)).blob()
-        let decryption =  await lit.decryptText(encryptedBlob, encryptedSymmetricKey, accessControlConditions, signData)
-        
-        setDecryptedContent(decryption)
-        setModalOpen(false)
-        setDecrypting(false)
-        //TODO handle failure
+        try{
+            setDecrypting(true)
+            console.log('decrypting content...')
+            console.log(publication)
+            console.log('accessControlConditions: ', accessControlConditions)
+            let encryptedString = publication.metadata.content
+            const encryptedBlob = await (await fetch(encryptedString)).blob()
+            let decryption =  await lit.decryptText(encryptedBlob, encryptedSymmetricKey, accessControlConditions, signData)
+            
+            setDecryptedContent(decryption)
+            setModalOpen(false)
+            setDecrypting(false)
+            //TODO handle failure
+        }catch(e){
+            console.log('error decrypting content: ', e)
+        }
+       
         
     }
 
@@ -93,7 +98,7 @@ export default function EncryptedPost({publication, encryptedSymmetricKey, acces
 
                         <h3 className="w-full text-xl  text-center font-semi-bold px-7">{`You must own "${contractName}" NFT to decrypt this lens post`}.</h3>
                         <div className="flex flex-row space-x-2 w-full items-center justify-center">
-                            <MintToken />
+                            {contractName === 'Lens Access' && <MintToken />}
 
                             <button
                                 type="button"
