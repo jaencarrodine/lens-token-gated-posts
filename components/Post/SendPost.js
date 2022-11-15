@@ -53,47 +53,53 @@ export default function SendPost(){
     async function savePost() {
         //add check to make sure user is signed in
         //add check to make sure access controls exist
-        console.log('saving post...')
-        const signData = {
-            userAddress: userAddress,
-            message: encryptSignatureMessage,
-            signMessageAsync: signMessageAsync
+        //TODO - better error handling
+        try{
+            console.log('saving post...')
+            const signData = {
+                userAddress: userAddress,
+                message: encryptSignatureMessage,
+                signMessageAsync: signMessageAsync
+            }
+            const postInfo= {
+                stringToEncrypt: postContent,
+                accessControlConditions: accessControlConditions,
+                name: postTitle,
+                description: postDescription
+            }
+            const ipfsResult= await uploadPostToIPFS(postInfo, profile, signData)
+            console.log('ipfsResult: ', ipfsResult)
+            const signedResult = await urqlMutation(createPostTypedData, {
+                profileId: profile.id,
+                contentURI: 'ipfs://' + ipfsResult.path,
+            })
+            console.log('signedResult: ', signedResult)
+
+            const typedData = signedResult.data.createPostTypedData.typedData;
+
+            const signature = await signedTypeData(typedData.domain, typedData.types, typedData.value, signer)
+            const { v, r, s } = splitSignature(signature);
+
+            const inputData = {
+                profileId: typedData.value.profileId,
+                contentURI: typedData.value.contentURI,
+                collectModule: typedData.value.collectModule,
+                collectModuleInitData: typedData.value.collectModuleInitData,
+                referenceModule: typedData.value.referenceModule,
+                referenceModuleInitData: typedData.value.referenceModuleInitData,
+                sig: {
+                    v,
+                    r,
+                    s,
+                    deadline: typedData.value.deadline,
+                },
+            };
+
+            const tx = await writeAsync({recklesslySetUnpreparedArgs: [inputData]})
+        }catch(e){
+            console.log('error: ', e)
         }
-        const postInfo= {
-            stringToEncrypt: postContent,
-            accessControlConditions: accessControlConditions,
-            name: postTitle,
-            description: postDescription
-        }
-        const ipfsResult= await uploadPostToIPFS(postInfo, profile, signData)
-        console.log('ipfsResult: ', ipfsResult)
-        const signedResult = await urqlMutation(createPostTypedData, {
-            profileId: profile.id,
-            contentURI: 'ipfs://' + ipfsResult.path,
-        })
-        console.log('signedResult: ', signedResult)
-
-        const typedData = signedResult.data.createPostTypedData.typedData;
-
-        const signature = await signedTypeData(typedData.domain, typedData.types, typedData.value, signer)
-        const { v, r, s } = splitSignature(signature);
-
-        const inputData = {
-            profileId: typedData.value.profileId,
-            contentURI: typedData.value.contentURI,
-            collectModule: typedData.value.collectModule,
-            collectModuleInitData: typedData.value.collectModuleInitData,
-            referenceModule: typedData.value.referenceModule,
-            referenceModuleInitData: typedData.value.referenceModuleInitData,
-            sig: {
-                v,
-                r,
-                s,
-                deadline: typedData.value.deadline,
-            },
-        };
-
-        const tx = await writeAsync({recklesslySetUnpreparedArgs: [inputData]})
+        
        
     }
 

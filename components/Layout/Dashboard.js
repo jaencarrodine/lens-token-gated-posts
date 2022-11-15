@@ -1,5 +1,5 @@
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
   Bars3BottomLeftIcon,
@@ -40,6 +40,14 @@ export default function Dashboard({children}) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const router = useRouter()
     const profile = useUserInfo(state => state.profile)
+  
+    const [profileImage, setProfileImage] = useState('')
+
+    useEffect(() => {
+        if(profile){
+            setProfileImage(profile.picture.original.url)
+        }
+    }, [profile])
     console.log('profile: ', profile)
     function isCurrentPath(item) {
         return router.pathname === item.href
@@ -47,6 +55,8 @@ export default function Dashboard({children}) {
         
     const {systemTheme} = useTheme()
 
+   
+    
     return (
         <>
         {/*
@@ -106,7 +116,7 @@ export default function Dashboard({children}) {
                     <div className="flex flex-shrink-0 items-center px-4">
                         <img
                         className="h-8 w-auto"
-                        src={profile?.picture?.original?.url}
+                        src={profileImage}
                         alt="Your Company"
                         />
                     </div>
@@ -226,7 +236,7 @@ export default function Dashboard({children}) {
                         <span className="sr-only">Open user menu</span>
                         <img
                             className="h-8 w-8 rounded-full"
-                            src={profile?.picture?.original?.url}
+                            src={profileImage}
                             alt=""
                         />
                         </Menu.Button>

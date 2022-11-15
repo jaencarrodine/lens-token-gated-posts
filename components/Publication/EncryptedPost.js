@@ -10,6 +10,7 @@ import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi'
 import AlchemyAPI from "../../lib/alchemy"
 import MintToken from "../MintToken"
+import Spinner from "../Utils/Spinner"
 //todo handle loading
 export default function EncryptedPost({publication, encryptedSymmetricKey, accessControlConditions}){
     const { openConnectModal } = useConnectModal();
@@ -18,6 +19,7 @@ export default function EncryptedPost({publication, encryptedSymmetricKey, acces
     const [contentDecrypted, setContentDecrypted] = useState(false)
     const [contractName, setContractName] = useState('')
     const [modalOpen, setModalOpen] = useState(true)
+    const [decrypting, setDecrypting] = useState(false)
     const message = 'Sign this message to decrypt the post'
     const {signMessageAsync, isLoading} = useSignMessage({
         message: message
@@ -30,15 +32,19 @@ export default function EncryptedPost({publication, encryptedSymmetricKey, acces
         signMessageAsync: signMessageAsync
     }
     async function decryptContent(){
+        setDecrypting(true)
         console.log('decrypting content...')
         console.log(publication)
         console.log('accessControlConditions: ', accessControlConditions)
         let encryptedString = publication.metadata.content
         const encryptedBlob = await (await fetch(encryptedString)).blob()
         let decryption =  await lit.decryptText(encryptedBlob, encryptedSymmetricKey, accessControlConditions, signData)
+        
         setDecryptedContent(decryption)
         setModalOpen(false)
+        setDecrypting(false)
         //TODO handle failure
+        
     }
 
     useEffect(() => {
@@ -94,7 +100,7 @@ export default function EncryptedPost({publication, encryptedSymmetricKey, acces
                                 className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm mt-5 sm:mt-6"
                                 onClick = {decryptContent}
                             >
-                                Decrypt Post
+                                {decrypting? <Spinner size='5' color ='secondary' background='gray-200'/>:'Decrypt Post'}
                             </button>
                         </div>
                     </>
