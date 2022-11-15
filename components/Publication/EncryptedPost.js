@@ -46,6 +46,7 @@ export default function EncryptedPost({publication, encryptedSymmetricKey, acces
             setDecrypting(false)
             //TODO handle failure
         }catch(e){
+            setDecrypting(false)
             console.log('error decrypting content: ', e)
         }
        
