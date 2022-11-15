@@ -4,7 +4,7 @@ import {useState} from 'react';
 import { LockOpenIcon } from '@heroicons/react/24/outline';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { useAccessControlData } from '../../store/useAccessControlData';
-export default function (){
+export default function GatePost(){
     const [modalOpen, setModalOpen] = useState(false);
     const accessControlConditions = useAccessControlData(state => state.accessControlConditions)
     function accessControlsSet(){

@@ -27,9 +27,9 @@ const Home = () => {
         <h1 className='font-bold text-3xl mb-2'>Your Posts</h1>
         <div className='grid grid-cols-3 gap-4'>
             <NewPostCard />
-            {publications.map((pub) => {
+            {publications.map((pub, i) => {
                 return (
-                <PostCard publication={pub}/>
+                <PostCard key = {i} publication={pub}/>
                 )
             })}
         </div>

@@ -91,7 +91,7 @@ export default function EncryptedPost({publication, encryptedSymmetricKey, acces
                     :
                     <>
 
-                        <h3 className="w-full text-xl  text-center font-semi-bold px-7">You must own "{contractName}" NFT to decrypt this lens post.</h3>
+                        <h3 className="w-full text-xl  text-center font-semi-bold px-7">{`You must own "${contractName}" NFT to decrypt this lens post`}.</h3>
                         <div className="flex flex-row space-x-2 w-full items-center justify-center">
                             <MintToken />
 

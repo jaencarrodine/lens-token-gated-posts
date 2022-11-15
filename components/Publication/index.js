@@ -5,7 +5,7 @@ import {getPublication} from '../../api/queries/getPublication';
 import ReactMarkdown from 'react-markdown'
 import EncryptedPost from './EncryptedPost';
 
-export default function publication({publicationId}){
+export default function Publication({publicationId}){
     const [publication, setPublication] = useState(null)
     useEffect(() => {
         getPost()

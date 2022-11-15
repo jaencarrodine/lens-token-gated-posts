@@ -122,8 +122,8 @@ export default function Dashboard({children}) {
                     </div>
                     <div className="mt-5 h-0 flex-1 overflow-y-auto">
                         <nav className="space-y-1 px-2">
-                        {navigation.map((item) => (
-                            <Link href = {item.href}>
+                        {navigation.map((item, i) => (
+                            <Link href = {item.href} key = {i}>
                                 <a
                                 key={item.name}
                             
@@ -170,8 +170,8 @@ export default function Dashboard({children}) {
                 </div>
                 <div className="flex flex-1 flex-col overflow-y-auto">
                 <nav className="flex-1 space-y-1 px-2 py-4">
-                    {navigation.map((item) => (
-                        <Link href = {item.href}>
+                    {navigation.map((item, i) => (
+                        <Link href = {item.href} key = {i}>
                             <a
                                 key={item.name}
                                 href={item.href}
