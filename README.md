@@ -1,4 +1,4 @@
-# Proof of concept app that uses Lit Protocol to token gate lens posts
+#  Token gated Lens posts
 
 ## Live Demo:
 [https://lensgate.netlify.app/](https://lensgate.netlify.app/)
