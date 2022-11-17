@@ -1,4 +1,6 @@
-## ⚠️ This uses the Lit sdk directly. Lens has released their own gating sdk [https://docs.lens.xyz/docs/gated](https://docs.lens.xyz/docs/gated) which is easier to use and applies the correct metadata standards ⚠️
+## ⚠️ This uses the Lit sdk directly - this is no longer advisable ⚠️
+
+Lens has released their own gating sdk [https://docs.lens.xyz/docs/gated](https://docs.lens.xyz/docs/gated) which is easier to use and applies the correct metadata standards 
 
 
 #  Token gated Lens posts
